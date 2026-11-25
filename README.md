@@ -1,71 +1,54 @@
-# Agenda de avalia��o visual
+# Agenda de avalia\u00e7\u00e3o visual
 
-Aplica��o de agendamento para consult�rios de optometria. Pacientes escolhem profissional, data e hor�rio sem criar conta; a equipe entra em `/consultorio` para administrar reservas, profissionais, expediente e banner.
+Projeto de agendamento para consult\u00f3rios de optometria. O paciente escolhe um profissional, uma data e um hor\u00e1rio sem criar conta. A equipe administra os agendamentos em \u0060/consultorio\u0060.
 
-> Projeto em desenvolvimento. Este reposit�rio publica o c�digo, n�o hospeda a aplica��o. O endere�o `localhost` s� funciona no computador onde os servidores est�o rodando.
+> O GitHub guarda o c\u00f3digo e este README. Ele ainda n\u00e3o coloca o site online para seus clientes.
 
 ## Tecnologias
 
-| Camada | Tecnologia | Responsabilidade |
-| --- | --- | --- |
-| Interface | React, TypeScript, Vite e Astryx | Telas, calend�rio, formul�rios e pr�via local |
-| API | Node.js (JavaScript, m�dulos ES) | Valida��o, login da equipe e regras das reservas |
-| Dados | SQLite (`node:sqlite`) | Consult�rios, profissionais, hor�rios, banner e agendamentos |
-| Testes | `node:test` | Regras, autentica��o e separa��o das agendas |
+- **React e TypeScript:** telas e intera\u00e7\u00f5es do site.
+- **Node.js e JavaScript:** API que valida e registra as reservas.
+- **SQLite:** banco local usado nesta vers\u00e3o.
+- **Astryx:** componentes visuais.
+- **Vite:** servidor de desenvolvimento local.
 
-## Executar no Windows
+## Abrir no seu computador
 
-Instale Node.js 22.13 ou superior. No PowerShell, dentro da pasta deste projeto:
+Instale Node.js 22.13 ou superior e depend\u00eancias com \u0060npm ci\u0060. Abra dois terminais PowerShell nesta pasta.
 
-```powershell
-npm ci
-```
+No primeiro terminal, inicie a API:
 
-Abra **dois terminais** na pasta. No primeiro, configure uma senha administrativa de 12 a 128 caracteres para este computador e ligue a API:
-
-```powershell
-$env:ADMIN_PASSWORD='uma-senha-forte-que-voce-escolheu'
+\u0060\u0060\u0060powershell
+$env:ADMIN_PASSWORD='sua-senha-local'
 $env:CLINIC_ID='fabio-ramos'
 npm run api
-```
+\u0060\u0060\u0060
 
-N�o coloque a senha no c�digo, README ou em arquivos enviados ao GitHub. O script `./start-api.ps1` s� funciona no computador que j� possui o arquivo local criptografado `.admin-password.dpapi`; ele n�o � distribu�do pelo reposit�rio.
+No segundo terminal, inicie o site:
 
-No segundo terminal:
-
-```powershell
+\u0060\u0060\u0060powershell
 npm run dev
-```
+\u0060\u0060\u0060
 
-Abra [a p�gina de agendamento](http://127.0.0.1:5173/) ou [o painel do consult�rio](http://127.0.0.1:5173/consultorio). No painel, informe o ID definido em `CLINIC_ID` e a senha definida em `ADMIN_PASSWORD`. O ID inicial � `fabio-ramos`.
+Depois, no navegador, abra http://127.0.0.1:5173/ para ver o agendamento ou http://127.0.0.1:5173/consultorio para abrir o painel administrativo. O ID inicial do consult\u00f3rio \u00e9 \u0060fabio-ramos\u0060.
 
-Se o navegador mostrar erro ao carregar a agenda, confira se **os dois terminais** continuam abertos. Para parar os servidores, pressione `Ctrl+C` em cada terminal.
+**Para mostrar ao cliente:** se ele estiver ao seu lado, abra a p\u00e1gina de agendamento neste computador. O endere\u00e7o local n\u00e3o abre no computador ou celular dele. Para enviar um link remoto, primeiro precisamos hospedar o site e a API em um servi\u00e7o online com banco de dados e HTTPS.
 
-## Como funciona o agendamento
+## Profissionais
 
-1. O consult�rio entra em `/consultorio`, cadastra profissionais e ajusta o expediente.
-2. O paciente escolhe profissional, data e hor�rio livre; informa nome e telefone com DDD e confirma.
-3. A API confere novamente a disponibilidade antes de salvar. Reservas do mesmo hor�rio podem existir para profissionais diferentes; o mesmo profissional n�o pode receber duas reservas no mesmo hor�rio.
-4. A equipe pode agendar manualmente, atualizar a lista, cancelar reservas, desativar profissionais sem reservas futuras e editar o banner.
+O paciente escolhe um profissional antes de selecionar hor\u00e1rio. Cada profissional tem seus pr\u00f3prios hor\u00e1rios ocupados. O painel permite cadastrar, renomear e desativar profissionais. O expediente \u00e9 compartilhado entre profissionais do mesmo consult\u00f3rio.
 
-Na atualiza��o de um banco antigo, os agendamentos existentes s�o associados ao profissional principal. Registros anteriores s�o preservados.
+## V\u00e1rios consult\u00f3rios
 
-## Mais de um consult�rio
+Esta vers\u00e3o configura um consult\u00f3rio por instala\u00e7\u00e3o usando \u0060CLINIC_ID\u0060. Ainda n\u00e3o existe um painel central para cadastrar contas de clientes, e alguns contatos e textos s\u00e3o espec\u00edficos do Fabio Ramos. Antes de vender o servi\u00e7o para outros consult\u00f3rios, ser\u00e1 preciso tornar esses dados edit\u00e1veis e preparar uma hospedagem segura. A migra\u00e7\u00e3o para Supabase ser\u00e1 planejada em outra conversa.
 
-Cada execu��o da aplica��o atende **um consult�rio**, identificado por `CLINIC_ID`. Os agendamentos e profissionais s�o marcados com o ID do consult�rio e as opera��es do painel filtram esse ID. Para instalar para outro consult�rio, configure uma implanta��o e banco pr�prios, com outra senha e outro `CLINIC_ID`, e ajuste os dados pelo painel.
+## Senhas e dados
 
-Nesta vers�o, o expediente e a dura��o s�o compartilhados pelos profissionais de um mesmo consult�rio, embora as reservas sejam separadas por profissional. Endere�o, telefone e informa��es institucionais ainda est�o fixos para Fabio Ramos na interface. Antes de entregar a outro consult�rio, esses dados precisam ser transformados em configura��es edit�veis. Um painel central para cadastrar consult�rios e um �nico servidor para v�rias cl�nicas ainda n�o est�o implementados.
+N\u00e3o publique senhas, arquivos locais ou o banco de pacientes. O arquivo de senha local e a pasta \u0060data\u0060 ficam fora do Git. A senha administrativa deve ser configurada no computador ou no servi\u00e7o de hospedagem, nunca escrita no c\u00f3digo.
 
-## Seguran�a e opera��o
+## Verificar
 
-- A senha n�o deve ser versionada. A API armazena um hash; a sess�o administrativa usa cookie HttpOnly.
-- `data/agenda.sqlite`, vari�veis locais e a senha criptografada deste computador devem ficar fora do Git. O banco cont�m dados pessoais e exige acesso restrito e c�pias de seguran�a.
-- O telefone n�o � confirmado por SMS. Cancelamentos de pacientes s�o solicitados ao consult�rio.
-- A API local escuta em `127.0.0.1:8787`; Vite encaminha `/api` durante o desenvolvimento. Publicar no GitHub **n�o** disponibiliza o servi�o para pacientes. Produ��o exige HTTPS, servidor, dom�nio, backup e controle de acesso.
-
-## Verificar altera��es
-
-```powershell
+\u0060\u0060\u0060powershell
 npm run build
 npm test
-```
+\u0060\u0060\u0060
